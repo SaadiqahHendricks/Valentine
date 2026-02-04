@@ -53,6 +53,32 @@ button { cursor:pointer; font-family:'Inter',sans-serif; }
   margin:0 auto 40px auto; 
   padding:0 10px;
 }
+
+/* Responsive adjustments */
+@media (max-width: 1024px) {
+  .gallery {
+    grid-template-columns: repeat(4, 1fr); /* 4 columns for tablets */
+  }
+}
+
+@media (max-width: 768px) {
+  .gallery {
+    grid-template-columns: repeat(3, 1fr); /* 3 columns for large phones */
+  }
+}
+
+@media (max-width: 480px) {
+  .gallery {
+    grid-template-columns: repeat(2, 1fr); /* 2 columns for small phones */
+  }
+}
+
+@media (max-width: 320px) {
+  .gallery {
+    grid-template-columns: 1fr; /* 1 column for very small screens */
+  }
+}
+
 .photo { position:relative; aspect-ratio:1/1; border-radius:18px; overflow:hidden; cursor:pointer; background:#fff; box-shadow:0 10px 25px rgba(0,0,0,0.15); transition: transform 0.3s ease, box-shadow 0.3s ease, border 0.3s ease; border:2px solid transparent; }
 .photo:hover { transform: translateY(-6px) rotate(-1deg) scale(1.03); box-shadow:0 15px 35px rgba(255,77,109,0.35); border:2px solid rgba(255,77,109,0.4); }
 .photo img { width:100%; height:100%; object-fit:cover; display:block; transition:transform 0.4s ease; }
@@ -86,10 +112,15 @@ button { cursor:pointer; font-family:'Inter',sans-serif; }
 </div>
 
 <!-- Heart burst -->
-<div id="burstHeart">💖</div>
+<div id="burstHeart">❤️</div>
 
 <!-- Gallery title -->
 <div class="galleryTitle">A Little Love Gallery ❤️</div>
+
+<!-- Instruction -->
+<div id="instruction" style="font-size:1rem; margin:10px 0; color:#ff4d6d; font-weight:500;">
+  💌 Click on each image to reveal your little love note!
+</div>
 
 <!-- Gallery -->
 <div class="gallery" id="gallery"></div>
