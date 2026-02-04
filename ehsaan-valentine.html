@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Ehsaan — My Valentine 💘</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital@0;1&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+
+<style>
+:root {
+  --bg: #fff0f5;
+  --accent: #ff4d6d;
+  --soft: #ffe1e8;
+  --text: #2b2b2b;
+  --card-glow: rgba(255,77,109,0.4);
+}
+
+/* Global */
+* { box-sizing: border-box; }
+body { margin:0; font-family:'Inter', sans-serif; background: radial-gradient(circle at top, #ffeef2,#fff0f5 70%); overflow-x:hidden; text-align:center; color:var(--text); }
+button { cursor:pointer; font-family:'Inter',sans-serif; }
+
+/* Landing page */
+#landing { position:fixed; inset:0; background:radial-gradient(circle at top, #ffeef2,#fff0f5 70%); display:flex; flex-direction:column; align-items:center; justify-content:center; z-index:10; transition:opacity 0.8s ease; }
+#landing.hidden { opacity:0; pointer-events:none; }
+#landing h1 { font-family:'Playfair Display', serif; font-size:3rem; background: linear-gradient(135deg, #ff4d6d, #ff1f4c); -webkit-background-clip:text; -webkit-text-fill-color:transparent; margin-bottom:12px; }
+#landing p { font-size:1.1rem; margin-bottom:25px; }
+#landing button { background:var(--accent); color:white; border:none; border-radius:30px; padding:16px 32px; font-size:1rem; box-shadow:0 8px 25px rgba(0,0,0,0.2); transition:transform 0.2s ease; }
+#landing button:hover { transform:scale(1.05); }
+
+/* Heart burst on landing exit */
+#burstHeart {
+  position:fixed; top:50%; left:50%;
+  font-size:5rem;
+  transform:translate(-50%,-50%) scale(0);
+  opacity:0;
+  pointer-events:none;
+  transition: all 0.6s ease;
+  z-index:15;
+}
+
+/* Floating hearts */
+.heart { position:fixed; bottom:-20px; font-size:18px; animation: floatUp linear infinite; pointer-events:none; }
+@keyframes floatUp { 0%{transform:translateY(0) scale(1); opacity:0.6;} 50%{opacity:1;} 100%{transform:translateY(-120vh) scale(1.3); opacity:0;} }
+
+/* Gallery */
+.galleryTitle { font-family:'Playfair Display', serif; font-size:2rem; margin:30px 0 15px 0; background: linear-gradient(135deg, #ff4d6d, #ff1f4c); -webkit-background-clip:text; -webkit-text-fill-color:transparent; }
+.gallery { 
+  display:grid; 
+  grid-template-columns:repeat(5,1fr); /* Exactly 5 cards per row */ 
+  gap:18px; 
+  max-width:1200px; 
+  margin:0 auto 40px auto; 
+  padding:0 10px;
+}
+.photo { position:relative; aspect-ratio:1/1; border-radius:18px; overflow:hidden; cursor:pointer; background:#fff; box-shadow:0 10px 25px rgba(0,0,0,0.15); transition: transform 0.3s ease, box-shadow 0.3s ease, border 0.3s ease; border:2px solid transparent; }
+.photo:hover { transform: translateY(-6px) rotate(-1deg) scale(1.03); box-shadow:0 15px 35px rgba(255,77,109,0.35); border:2px solid rgba(255,77,109,0.4); }
+.photo img { width:100%; height:100%; object-fit:cover; display:block; transition:transform 0.4s ease; }
+.photo.revealed img { transform: scale(1.08); }
+
+/* Overlay */
+.overlay { position:absolute; inset:0; background: rgba(255,255,255,0.92); display:flex; align-items:center; justify-content:center; text-align:center; padding:14px; font-size:0.88rem; opacity:0; transform:scale(0.9); transition:opacity 0.35s ease, transform 0.35s ease; font-weight:500; }
+.photo.revealed .overlay { opacity:1; transform:scale(1); }
+
+/* Bottom message panel */
+#bottomMessage { position:fixed; bottom:20px; left:50%; transform:translateX(-50%); background:rgba(255,255,255,0.95); backdrop-filter:blur(10px); padding:14px 20px; border-radius:16px; box-shadow:0 8px 25px rgba(0,0,0,0.2); font-size:0.95rem; opacity:0; transition:opacity 0.5s ease, transform 0.5s ease; max-width:90%; z-index:5; }
+#bottomMessage.visible { opacity:1; transform:translateX(-50%) translateY(0); }
+
+/* Fullscreen final overlay */
+#final { position:fixed; inset:0; display:flex; flex-direction:column; align-items:center; justify-content:center; background:rgba(255,240,245,0.95); backdrop-filter:blur(6px); opacity:0; pointer-events:none; transition:opacity 0.8s ease; z-index:20; }
+#final.visible { opacity:1; pointer-events:auto; }
+#final h2 { font-family:'Playfair Display', serif; font-size:2.2rem; margin-bottom:12px; background: linear-gradient(135deg,#ff4d6d,#ff1f4c); -webkit-background-clip:text; -webkit-text-fill-color:transparent; }
+#final p { font-size:1.1rem; line-height:1.5; color:#555; text-align:center; max-width:400px; }
+#final button { margin-top:20px; background:var(--accent); border:none; border-radius:30px; padding:14px 32px; color:white; font-size:1rem; box-shadow:0 10px 25px rgba(0,0,0,0.2); transition: transform 0.2s ease; }
+#final button:hover { transform:scale(1.05); box-shadow:0 12px 30px rgba(0,0,0,0.25); }
+
+</style>
+</head>
+<body>
+
+<!-- Landing page -->
+<div id="landing">
+  <h1>Ehsaan 💘</h1>
+  <p>Your Valentine’s Day surprise awaits!</p>
+  <button onclick="startGallery()">To My Valentine</button>
+</div>
+
+<!-- Heart burst -->
+<div id="burstHeart">💖</div>
+
+<!-- Gallery title -->
+<div class="galleryTitle">A Little Love Gallery ❤️</div>
+
+<!-- Gallery -->
+<div class="gallery" id="gallery"></div>
+
+<!-- Bottom message panel -->
+<div id="bottomMessage"></div>
+
+<!-- Final full-screen message -->
+<div id="final">
+  <h2>Thank you for being the best husband 💖</h2>
+  <p>Every day with you is special.<br>Today and always.</p>
+  <button onclick="heartExplosion()">Celebrate Love 💗</button>
+</div>
+
+<script>
+// Messages for each card
+const messages = [
+  "You make my life softer.",
+  "This one is my favourite human.",
+  "I love doing life with you.",
+  "You make everything funnier.",
+  "Safe feels like this.",
+  "I still choose you.",
+  "You’re stuck with me.",
+  "Comfort person forever.",
+  "I love us.",
+  "You make me smile for no reason.",
+  "My favourite memories have you in them.",
+  "I’d pick you again.",
+  "You’re home.",
+  "You make bad days lighter.",
+  "You’re my calm.",
+  "This is love.",
+  "My favourite place is next to you.",
+  "Lucky me.",
+  "Always you.",
+  "Happy Valentine’s Day 💘"
+];
+
+const gallery = document.getElementById("gallery");
+const bottomMessage = document.getElementById("bottomMessage");
+const final = document.getElementById("final");
+const burstHeart = document.getElementById("burstHeart");
+let revealed = 0;
+
+// Landing page transition with heart burst
+function startGallery() {
+  burstHeart.style.transform = "translate(-50%, -50%) scale(6)";
+  burstHeart.style.opacity = "1";
+  setTimeout(() => {
+    document.getElementById("landing").classList.add("hidden");
+    burstHeart.style.opacity = "0";
+  }, 600);
+}
+
+// Create 20 cards
+for (let i = 1; i <= 20; i++) {
+  const div = document.createElement("div");
+  div.className = "photo";
+
+  const img = document.createElement("img");
+  img.src = `1%20(${i}).JPEG`; // Make sure your images match these filenames
+
+  const overlay = document.createElement("div");
+  overlay.className = "overlay";
+  overlay.textContent = messages[i-1];
+
+  div.appendChild(img);
+  div.appendChild(overlay);
+  gallery.appendChild(div);
+
+  div.addEventListener("click", () => {
+    if (!div.classList.contains("revealed")) {
+      div.classList.add("revealed");
+      revealed++;
+      updateBottomMessage(messages[i-1]);
+      spawnHeart();
+      if (revealed === 20) final.classList.add("visible");
+    } else {
+      div.classList.remove("revealed");
+      hideBottomMessage();
+    }
+  });
+}
+
+// Bottom message panel
+function updateBottomMessage(msg) {
+  bottomMessage.textContent = msg;
+  bottomMessage.classList.add("visible");
+}
+
+function hideBottomMessage() {
+  bottomMessage.classList.remove("visible");
+}
+
+// Floating hearts
+function spawnHeart() {
+  const h = document.createElement("div");
+  h.className = "heart";
+  h.textContent = Math.random()>0.5?"💗":"💖";
+  h.style.left = Math.random()*100+"vw";
+  h.style.animationDuration = (5 + Math.random()*5)+"s";
+  document.body.appendChild(h);
+  setTimeout(()=>h.remove(),12000);
+}
+
+// Heart explosion for final button
+function heartExplosion() {
+  for(let i=0;i<40;i++){
+    setTimeout(spawnHeart,i*50);
+  }
+}
+
+// subtle continuous hearts
+setInterval(()=>spawnHeart(),1500);
+
+</script>
+
+</body>
+</html>
